@@ -2173,13 +2173,17 @@ if(IOS)
 	set_source_files_properties(${RSRC_XIB_FILES}
 		PROPERTIES MACOSX_PACKAGE_LOCATION Resources
 	)
-	if(CMAKE_GENERATOR STREQUAL "Xcode")
-		set(APP_DIR_NAME "${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}")
-	else()
+	
+	# the commented out stuff doesn't seem to work
+	#if(CMAKE_GENERATOR STREQUAL "Xcode")
+	#	set(APP_DIR_NAME "${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}")
+	#else()
 		set(APP_DIR_NAME "$<TARGET_FILE_DIR:PPSSPP>")
-	endif()
+	#endif()
+	message("APP_DIR_NAME: ${APP_DIR_NAME}")
 	add_custom_command(TARGET PPSSPP POST_BUILD
-		COMMAND mkdir -p \"${APP_DIR_NAME}\"
+		COMMAND pwd
+		COMMAND mkdir -p ${APP_DIR_NAME}
 		COMMAND tar -c -C ${CMAKE_CURRENT_BINARY_DIR} --exclude .DS_Store --exclude .git assets *.png | tar -x -C \"${APP_DIR_NAME}\"
 		COMMAND /bin/bash "${CMAKE_SOURCE_DIR}/ios/macbundle.sh" \"${APP_DIR_NAME}\"
 	)
